@@ -15,6 +15,7 @@ typedef struct {
 	const char *desc;
 } cmdlist;
 
+int stoi(char *);
 void ls_command(int, char **);
 void man_command(int, char **);
 void cat_command(int, char **);
@@ -165,7 +166,22 @@ void test_command(int n, char *argv[]) {
     int error;
 
     fio_printf(1, "\r\n");
-    
+    if(n==2)
+	{
+		int i;
+		int count=stoi(argv[1]);	//transfer string to int type
+		int result = 1;			//Fibonacci algorithm
+		int prev = -1;
+		int sum = 0;
+		for(i=0;i<=count;i++)
+		{
+			sum =result + prev;
+			prev = 	result;
+			result = sum;
+		}
+		fio_printf(1,"\r\nFibonacci number at %d is %d\r\n",count,result);	//print the result
+	}
+
     handle = host_action(SYS_SYSTEM, "mkdir -p output");
     handle = host_action(SYS_SYSTEM, "touch output/syslog");
 
@@ -184,6 +200,16 @@ void test_command(int n, char *argv[]) {
     }
 
     host_action(SYS_CLOSE, handle);
+}
+
+int stoi(char *str)
+{
+	int i,result=0,count=strlen(str);	//count the length
+	for(i=0;i<count;i++)
+	{
+		result = result*10 + (str[i]-'0');	//transform every digi of number by sub '0' which is 48 in ascii table
+	}
+	return result;
 }
 
 void _command(int n, char *argv[]){
