@@ -166,22 +166,28 @@ void test_command(int n, char *argv[]) {
     int error;
 
     fio_printf(1, "\r\n");
-    if(n==2)
-	{
-		int i;
-		int count=stoi(argv[1]);	//transfer string to int type
-		int result = 1;			//Fibonacci algorithm
-		int prev = -1;
-		int sum = 0;
-		for(i=0;i<=count;i++)
-		{
-			sum =result + prev;
-			prev = 	result;
-			result = sum;
-		}
-		fio_printf(1,"\r\nFibonacci number at %d is %d\r\n",count,result);	//print the result
+    if(n==2){		
+	int i;
+	int count=stoi(argv[1]);	//transfer string to int type
+	int result = 1;			//Fibonacci algorithm
+	int prev = -1;
+	int sum = 0;
+	for(i=0;i<=count;i++){
+		sum =result + prev;
+		prev = 	result;
+		result = sum;
 	}
-
+	fio_printf(1,"\r\nFibonacci number at %d is %d\r\n",count,result);	//print the result
+	}
+    if(*argv[1]=='e'){	//if the argv is 'e'
+	int fd = fs_open(argv[2],0,O_RDONLY);
+	fio_printf(1,"\r\nfd=%d\r\n",fd);
+	if(fd == -2 || fd == -1)
+		fio_printf(1,"\r\nThe file doesn't exist!\r\n");
+	else {
+		fio_printf(1,"\r\nThe file exist!\r\n");
+	}
+	}
     handle = host_action(SYS_SYSTEM, "mkdir -p output");
     handle = host_action(SYS_SYSTEM, "touch output/syslog");
 
