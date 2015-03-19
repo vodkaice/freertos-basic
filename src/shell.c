@@ -26,7 +26,7 @@ void host_command(int, char **);
 void mmtest_command(int, char **);
 void test_command(int, char **);
 void _command(int, char **);
-
+void new(int, char**);
 #define MKCL(n, d) {.name=#n, .fptr=n ## _command, .desc=d}
 
 cmdlist cl[]={
@@ -39,6 +39,7 @@ cmdlist cl[]={
 	MKCL(help, "help"),
 	MKCL(test, "test new function"),
 	MKCL(, ""),
+	MKCL(new,"new a task"),
 };
 
 int parse_command(char *str, char *argv[]){
@@ -178,7 +179,7 @@ void test_command(int n, char *argv[]) {
 		result = sum;
 	}
 	fio_printf(1,"\r\nFibonacci number at %d is %d\r\n",count,result);	//print the result
-	}
+    }
     if(*argv[1]=='e'){	//if the argv is 'e'
 	int fd = fs_open(argv[2],0,O_RDONLY);
 	fio_printf(1,"\r\nfd=%d\r\n",fd);
@@ -187,7 +188,7 @@ void test_command(int n, char *argv[]) {
 	else {
 		fio_printf(1,"\r\nThe file exist!\r\n");
 	}
-	}
+    }
     handle = host_action(SYS_SYSTEM, "mkdir -p output");
     handle = host_action(SYS_SYSTEM, "touch output/syslog");
 
@@ -211,8 +212,7 @@ void test_command(int n, char *argv[]) {
 int stoi(char *str)
 {
 	int i,result=0,count=strlen(str);	//count the length
-	for(i=0;i<count;i++)
-	{
+	for(i=0;i<count;i++){
 		result = result*10 + (str[i]-'0');	//transform every digi of number by sub '0' which is 48 in ascii table
 	}
 	return result;
@@ -233,3 +233,11 @@ cmdfunc *do_command(const char *cmd){
 	}
 	return NULL;	
 }
+
+void new_command(int n,char *argv[])
+{
+	
+	
+
+}
+
