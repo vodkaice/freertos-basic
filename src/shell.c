@@ -236,21 +236,23 @@ cmdfunc *do_command(const char *cmd){
 	return NULL;	
 }
 
-xTaskHandle xHandle = NULL;
+xTaskHandle xHandle[20];
 void new_command(int n,char *argv[]){
-	
+	int i;
 	if(n!=2){
 		fio_printf(1,"\r\nerror!\r\n");
 		return;
 	}
-	
-	xTaskCreate(test_task,(signed portCHAR *)"my task",128,NULL,tskIDLE_PRIORITY ,&xHandle);
+	for(i=0;i<stoi(argv[1]);i++){	
+		xTaskCreate(test_task,(signed portCHAR *)"my task",128,NULL,tskIDLE_PRIORITY ,&xHandle[i]);
+	}
 	//configASSERT(xHandle);
 	fio_printf(1,"\r\nmy task\r\n");
-
 
 }
 void test_task(void *pvParameters){
 //	fio_printf(1,"\r\nmy task eee\r\n");
-	vTaskSuspend(xHandle);
+//	vTaskSuspend(xHandle);
+	while(1);	
+	
 }

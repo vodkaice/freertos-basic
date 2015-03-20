@@ -16,7 +16,7 @@
 #include "clib.h"
 #include "shell.h"
 #include "host.h"
-
+#include "time.h"
 /* _sromfs symbol can be found in main.ld linker script
  * it contains file system structure of test_romfs directory
  */
@@ -115,15 +115,24 @@ void system_logger(void *pvParameters)
     char *tag = "\nName          State   Priority  Stack  Num\n*******************************************\n";
     int handle, error;
     const portTickType xDelay = 100000 / 100;
-
     handle = host_action(SYS_OPEN, "output/syslog", 4);
     if(handle == -1) {
-        fio_printf(1, "Open file error!\n");
-        return;
+        /*fio_printf(1, "Open file error!\n");
+        return;*/
+	handle = host_action(SYS_SYSTEM, "mkdir -p output");		//avoid that we don't have this file
+	handle = host_action(SYS_SYSTEM, "touch output/syslog");
+	
     }
 
     while(1) {
         memcpy(output, tag, strlen(tag));
+	
+	handle = host_action(SYS_OPEN, "output/syslog", 8);
+    	if(handle == -1) {
+        	fio_printf(1, "Open file error!\n\r");
+        	return;
+    	}
+
         error = host_action(SYS_WRITE, handle, (void *)output, strlen(output));
         if(error != 0) {
             fio_printf(1, "Write file error! Remain %d bytes didn't write in the file.\n\r", error);
