@@ -146,7 +146,6 @@ void system_logger(void *pvParameters)
     
     host_action(SYS_CLOSE, handle);
 }
-
 int main()
 {
 	init_rs232();
@@ -169,14 +168,13 @@ int main()
 	/* Create a task to output text read from romfs. */
 	xTaskCreate(command_prompt,
 	            (signed portCHAR *) "CLI",
-	            512 /* stack size */, NULL, tskIDLE_PRIORITY + 2, NULL);
+	            512 /* stack size */, NULL, tskIDLE_PRIORITY + 2,NULL);
 
-#if 0
 	/* Create a task to record system log. */
 	xTaskCreate(system_logger,
 	            (signed portCHAR *) "Logger",
 	            1024 /* stack size */, NULL, tskIDLE_PRIORITY + 1, NULL);
-#endif
+
 
 	/* Start running the tasks. */
 	vTaskStartScheduler();

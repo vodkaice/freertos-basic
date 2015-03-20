@@ -26,7 +26,8 @@ void host_command(int, char **);
 void mmtest_command(int, char **);
 void test_command(int, char **);
 void _command(int, char **);
-void new(int, char**);
+void new_command(int, char**);
+void test_task();
 #define MKCL(n, d) {.name=#n, .fptr=n ## _command, .desc=d}
 
 cmdlist cl[]={
@@ -39,7 +40,7 @@ cmdlist cl[]={
 	MKCL(help, "help"),
 	MKCL(test, "test new function"),
 	MKCL(, ""),
-	MKCL(new,"new a task"),
+	MKCL(new, "new a task"),
 };
 
 int parse_command(char *str, char *argv[]){
@@ -188,6 +189,7 @@ void test_command(int n, char *argv[]) {
 	else {
 		fio_printf(1,"\r\nThe file exist!\r\n");
 	}
+	
     }
     handle = host_action(SYS_SYSTEM, "mkdir -p output");
     handle = host_action(SYS_SYSTEM, "touch output/syslog");
@@ -234,10 +236,21 @@ cmdfunc *do_command(const char *cmd){
 	return NULL;	
 }
 
-void new_command(int n,char *argv[])
-{
+xTaskHandle xHandle = NULL;
+void new_command(int n,char *argv[]){
 	
+	if(n!=2){
+		fio_printf(1,"\r\nerror!\r\n");
+		return;
+	}
 	
+	xTaskCreate(test_task,(signed portCHAR *)"my task",128,NULL,tskIDLE_PRIORITY ,&xHandle);
+	//configASSERT(xHandle);
+	fio_printf(1,"\r\nmy task\r\n");
+
 
 }
-
+void test_task(void *pvParameters){
+//	fio_printf(1,"\r\nmy task eee\r\n");
+	vTaskSuspend(xHandle);
+}
